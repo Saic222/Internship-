@@ -1,0 +1,46 @@
+manifest.json
+content.js
+styles.css
+{
+  "manifest_version": 3,
+  "name": "LinkedIn Profile Picture Modifier",
+  "version": "1.0",
+  "description": "Modifies profile pictures in LinkedIn posts.",
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.linkedin.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ]
+    }
+  ],
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    function replaceProfilePictures() {
+        const profilePics = document.querySelectorAll('img.profile-photo, img.feed-shared-actor__avatar');
+        profilePics.forEach((img) => {
+            img.src = 'https://via.placeholder.com/100';
+        });
+    }
+    replaceProfilePictures();
+    const observer = new MutationObserver(replaceProfilePictures);
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+});
+img.profile-photo, img.feed-shared-actor__avatar {
+    border: 2px solid red;
+}
